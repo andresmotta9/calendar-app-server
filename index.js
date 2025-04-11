@@ -8,7 +8,7 @@ const app = express();
 app.use(express.static('public'));
 
 // Routes
-app.use('/ api/auth', require('./routes/auth'));
+app.use('/api/auth', require('./routes/auth'));
 // TODO: CRUD: Eventos
 
 // Listen port
