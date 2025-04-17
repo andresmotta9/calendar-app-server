@@ -18,9 +18,19 @@ const {
   updateEvent,
   deleteEvent,
 } = require('../controllers/events');
+const { isDate } = require('../helpers/isDate');
 
 router.get('/', getEvents);
-router.post('/', createEvent);
+router.post(
+  '/',
+  [
+    check('title', 'Title is required').not().isEmpty(),
+    check('start', 'Initial Date is required').custom(isDate),
+    check('end', 'Initial Date is required').custom(isDate),
+    validateFields,
+  ],
+  createEvent
+);
 router.put('/:id', updateEvent);
 router.delete('/:id', deleteEvent);
 
