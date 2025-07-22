@@ -20,7 +20,10 @@ const {
 } = require('../controllers/events');
 const { isDate } = require('../helpers/isDate');
 
+//Get Event
 router.get('/', getEvents);
+
+//Create Event
 router.post(
   '/',
   [
@@ -31,7 +34,10 @@ router.post(
   ],
   createEvent
 );
+// Update Event
 router.put('/:id', updateEvent);
+
+// Delete Event
 router.delete('/:id', deleteEvent);
 
 module.exports = router;
