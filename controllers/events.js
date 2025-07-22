@@ -35,7 +35,7 @@ const updateEvent = async (req, res = response) => {
   try {
     const event = await Event.findById(eventId);
     if (!event) {
-      res.status(404).json({
+      return res.status(404).json({
         ok: false,
         msg: 'The event does not exist',
       });
@@ -70,10 +70,36 @@ const updateEvent = async (req, res = response) => {
 };
 
 const deleteEvent = async (req, res = response) => {
-  return res.status(201).json({
-    ok: true,
-    msg: 'Event deleted',
-  });
+  const eventId = req.params.id;
+  const uid = req.uid;
+
+  try {
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({
+        ok: false,
+        msg: 'The event does not exist',
+      });
+    }
+
+    if (event.user.toString() !== uid) {
+      return res.status(401).json({
+        ok: false,
+        msg: 'You are not authorized to delete this event',
+      });
+    }
+
+    await Event.findByIdAndDelete(eventId);
+    return res.json({
+      ok: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: 'Talk with the administrator',
+    });
+  }
 };
 
 module.exports = { getEvents, createEvent, updateEvent, deleteEvent };
